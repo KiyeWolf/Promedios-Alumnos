@@ -49,15 +49,15 @@ alumnoparcial = ""
 print("Hola, bienvenido Profesor. Porfavor Siga las indicaciones.\n Las notas se comprenden de 1 a 10 o 0 para indicar que se ausentó.\n Ingrese apellido del alumno o 0 para finalizar:")
 alumnoparcial = input("Apellido: ")
 while(alumnoparcial!="0"):
-    alumnos_apellidos.append(alumnoparcial)
-    alumnos_nombres.append(input("Ingrese Nombre: "))
+    alumnos_apellidos.append(alumnoparcial.capitalize())
+    alumnos_nombres.append((input("Ingrese Nombre: ")).capitalize()) #Pide el nombre y ademas y coloca mayuscula
     nota = Validacion_notas(1)
     nota1.append(nota)
     nota = Validacion_notas(2)
     nota2.append(nota)
     print("Alumno registrado, ingrese otro.")
     alumnoparcial = input("Apellido: ")
-
+#En este momento se obtiene la condicion del alumno
 for i in range(len(alumnos_apellidos)):
     promedio = (nota1[i] + nota2[i]) / 2
     if (i == 0 or mejor_promedio < promedio):
@@ -74,7 +74,7 @@ with open("Alumnos.csv","w") as file:
     writer = csv.writer(file)
     writer.writerow(["Apellido","Nombre","Nota 1","Nota 2","Promedio","Condicion"])
     writer.writerows(alumnos)
-    print("Los datos se guardaron el csv correctamente.")
+    print("Los datos se guardaron en el csv correctamente.")
 datos_graficos_x = []
 datos_graficos_y = []
 muestra = []
@@ -86,7 +86,7 @@ for i in range(len(alumnos)):
 
 print(f"El Alumno con mejor promedio fue {alumno_con_mejor_promedio}, y su promedio fue {mejor_promedio}")
 
-
+#Esta parte crea el grafico de barras
 plt.figure(figsize=(6,3))
 plt.bar(datos_graficos_x, datos_graficos_y, edgecolor='red')
 plt.title("Promedio de los alumnos")
