@@ -1,11 +1,3 @@
-#Un profesor desea obtener los promedios de su camada de estudiantes.
-#Por cada alumno ingresa, Nombre y apellido (por separado) y Dos notas por alumno.
-#Se desea mostrar en un archivo csv, por separado y ordenado por apellido y Nombre, Los alumnos. Cada uno con sus notas y su promedio.
-
-#Además se desea obtener el alumno con mejor promedio o los alumnos con mejor promedio.
-#Indicar que alumnos deberán recuperar algun examen. Nota menor que 4.
-#Indicar que alumnos deben rendir un final. Nota entre 4 y 6.
-#Indicar que alumnos promocionaron la materia.
 import pandas as pd
 import csv
 import matplotlib.pyplot as plt
@@ -34,11 +26,19 @@ def Obtener_condicion(nota1,nota2):
     else:
         condicion = "REPRUEBA"    
     return condicion    
-    
+  
+def Solicitar_string (texto):
+    while True:
+        nombre = input(f"Ingrese el {texto}: ")
+        if nombre.isalpha()==True and len(nombre)>2:
+            return nombre  
+            break  
+        else:
+            print("Por favor ingrese mas de dos carácteres alfabeticos")
+
 
 mejor_promedio = 0
 alumno_con_mejor_promedio = ""
-
 alumnos_nombres = []
 alumnos_apellidos = []
 alumnos = []
@@ -47,16 +47,24 @@ nota2 = []
 promedio = []
 alumnoparcial = ""
 print("Hola, bienvenido Profesor. Porfavor Siga las indicaciones.\n Las notas se comprenden de 1 a 10 o 0 para indicar que se ausentó.\n Ingrese apellido del alumno o 0 para finalizar:")
-alumnoparcial = input("Apellido: ")
+alumnoparcial = input("Ingrese el Apellido: ")
+#valido el apellido
 while(alumnoparcial!="0"):
-    alumnos_apellidos.append(alumnoparcial.capitalize())
-    alumnos_nombres.append((input("Ingrese Nombre: ")).capitalize()) #Pide el nombre y ademas y coloca mayuscula
-    nota = Validacion_notas(1)
-    nota1.append(nota)
-    nota = Validacion_notas(2)
-    nota2.append(nota)
-    print("Alumno registrado, ingrese otro.")
-    alumnoparcial = input("Apellido: ")
+    #VALIDO EL NOMBRE
+    if len(alumnoparcial)>2:
+        if alumnoparcial.isalpha() == True:
+            alumnos_apellidos.append(alumnoparcial.capitalize()) 
+            alumnos_nombres.append((Solicitar_string("Nombre")).capitalize()) #Pide el nombre y ademas y coloca mayuscula
+            nota = Validacion_notas(1)
+            nota1.append(nota)
+            nota = Validacion_notas(2)
+            nota2.append(nota)
+            print("Alumno registrado, ingrese otro.")
+        else:
+            print("Por favor solo introduzca carácteres alfabéticos")    
+    else:
+        print("Ingrese mas de dos caracteres por favor.")
+    alumnoparcial = input("Ingrese el Apellido: ")
 #En este momento se obtiene la condicion del alumno
 for i in range(len(alumnos_apellidos)):
     promedio = (nota1[i] + nota2[i]) / 2
@@ -88,9 +96,11 @@ print(f"El Alumno con mejor promedio fue {alumno_con_mejor_promedio}, y su prome
 
 #Esta parte crea el grafico de barras
 plt.figure(figsize=(6,3))
-plt.bar(datos_graficos_x, datos_graficos_y, edgecolor='red')
+plt.bar(datos_graficos_x, datos_graficos_y, edgecolor='black', color=["brown","blue","gray","red","yellow"])
 plt.title("Promedio de los alumnos")
 plt.xlabel("Alumnos")
 plt.ylabel("Promedios")
+#Se agrego rotacion para mejor lectura
+plt.xticks(rotation=15)
 plt.savefig("Promedios_Alumnos.jpg")
 plt.show()
