@@ -25,8 +25,9 @@ Funcionalidades
 -Guardado de los datos en un archivo CSV ordenado alfabéticamente.
 
 -Generación de un gráfico de barras con los promedios de los alumnos.
+
 ---
-Tecnologías utilizadas
+**Tecnologías utilizadas**
 
 Python
 
