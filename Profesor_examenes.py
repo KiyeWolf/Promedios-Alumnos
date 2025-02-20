@@ -1,5 +1,6 @@
 import pandas as pd
 import csv
+import time
 import matplotlib.pyplot as plt
 
 def Validacion_notas(num):
@@ -35,7 +36,15 @@ def Solicitar_string (texto):
             break  
         else:
             print("Por favor ingrese mas de dos carácteres alfabeticos")
-
+            
+#Se corrige error, no se pueden colocar multiples apellidos
+def Validar_multiples_apellidos(texto):
+    flag = True
+    for i in range(len(texto)):
+        caracter = texto[i]
+        if (caracter.isalpha()==False and caracter!=' '):
+            flag = False
+    return flag
 
 mejor_promedio = 0
 alumno_con_mejor_promedio = ""
@@ -52,7 +61,7 @@ alumnoparcial = input("Ingrese el Apellido: ")
 while(alumnoparcial!="0"):
     #VALIDO EL NOMBRE
     if len(alumnoparcial)>2:
-        if alumnoparcial.isalpha() == True:
+        if alumnoparcial.isalpha() == True or Validar_multiples_apellidos(alumnoparcial) == True:
             alumnos_apellidos.append(alumnoparcial.capitalize()) 
             alumnos_nombres.append((Solicitar_string("Nombre")).capitalize()) #Pide el nombre y ademas y coloca mayuscula
             nota = Validacion_notas(1)
@@ -74,11 +83,13 @@ for i in range(len(alumnos_apellidos)):
     condicion = Obtener_condicion(int(nota1[i]),int(nota2[i]))
     alumnos.append([alumnos_apellidos[i], alumnos_nombres[i], nota1[i], nota2[i], promedio, condicion])
 alumnos.sort()
+print("Perfecto, se finalizó. La carga de alumnos. Estos se guardarán en un archivo para poder registrar su información.")
+nombre_csv = input("Porfavor ingrese el nombre para el archivo tipo CSV donde se guardarán los datos de los alumnos: ")
+nombre_csv = nombre_csv + ".csv"
 
-    
 
 
-with open("Alumnos.csv","w") as file:
+with open(nombre_csv,"w") as file:
     writer = csv.writer(file)
     writer.writerow(["Apellido","Nombre","Nota 1","Nota 2","Promedio","Condicion"])
     writer.writerows(alumnos)
@@ -91,8 +102,13 @@ for i in range(len(alumnos)):
     print(f"El alumno {muestra[0]},{muestra[1]} Tiene de Condicion: {muestra[-1]}")
     datos_graficos_x.append(f"{muestra[1]} {muestra[0]}")
     datos_graficos_y.append(muestra[-2])
+    time.sleep(.8)
 
 print(f"El Alumno con mejor promedio fue {alumno_con_mejor_promedio}, y su promedio fue {mejor_promedio}")
+#Seleccion del titulo para el grafico
+print("A continuación se creará automáticamente un gráfico de Barras, con la información correspondiente de cada Alumno, incluyendo su Apellido, Nombre y su nota de Promedio.")
+titulo_grafico = input("Porfavor Ingrese el título que desea tener el archivo con la imagen del grafico: ")
+titulo_grafico = titulo_grafico + ".jpg"
 
 #Esta parte crea el grafico de barras
 plt.figure(figsize=(6,3))
@@ -102,5 +118,5 @@ plt.xlabel("Alumnos")
 plt.ylabel("Promedios")
 #Se agrego rotacion para mejor lectura
 plt.xticks(rotation=15)
-plt.savefig("Promedios_Alumnos.jpg")
+plt.savefig(titulo_grafico)
 plt.show()
